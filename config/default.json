@@ -1,0 +1,54 @@
+{
+  "source": {
+    "baseUrl": "https://almacenamiento.msp.gob.ec/index.php/s/JgWHk8QARpWbF3Z/download?path=%2F&files",
+    "file": {
+      "name": "Base_covid19_msp",
+      "ext": "csv",
+      "encoding": "iso-8859-1",
+      "dateFormat": "ddMMMyyyy"
+    },
+    "columns": [
+      "anio",
+      "cod_prov_res",
+      "prov_residencia",
+      "cod_cant_res",
+      "cant_residencia",
+      "sexo",
+      "edad",
+      "tipo_edad",
+      "grupo_edad",
+      "inicio_sintomas",
+      "diagnostico",
+      "resultado_laboratorio",
+      "laboratorio_procesa",
+      "condicion_paciente",
+      "clasificacion_caso",
+      "total_muestras"
+    ],
+    "delimiter": ";",
+    "transformer": {
+      "integer": ["anio", "edad", "total_muestras"],
+      "singleQuote": ["cod_prov_res", "cod_cant_res"],
+      "questionMark": ["prov_residencia", "cant_residencia"],
+      "date": {
+        "columns": ["inicio_sintomas"],
+        "format": "yyyy-MM-dd"
+      }
+    }
+  },
+  "database": {
+    "connection": {
+      "host": "localhost",
+      "user": "root",
+      "password": "Passw0rd",
+      "database": "covid19ec"
+    },
+    "table": "msp"
+  },
+  "target": [
+    {
+      "name": "cities",
+      "query": "SELECT cant_residencia as city, prov_residencia as province, count(*) as confirmed, cod_prov_res as cartodbId, cod_cant_res as cantonId FROM covid19ec.msp WHERE resultado_laboratorio = 'Positivo' GROUP BY cant_residencia, prov_residencia, cod_prov_res, cod_cant_res ORDER BY cod_prov_res, cod_cant_res"
+    }
+  ]
+}
