@@ -1,7 +1,6 @@
 const path = require('path');
 const format = require('date-fns/format');
 const es = require('date-fns/locale/es');
-const stream = require('stream');
 const config = require('config');
 const downloadFile = require('./download-file');
 const importData = require('./import-data');
